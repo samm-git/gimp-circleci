@@ -15,11 +15,11 @@ jobs:
               curl  https://raw.githubusercontent.com/samm-git/gtk-osx/gimp-2.10/gtk-osx-build-setup.sh | sh
               echo 'export PATH="$HOME/.cargo/bin:$PATH:$HOME/.local/bin"' > ~/.profile
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
-              cat ~/.profile && source ~/.profile
+              cat ~/.profile
             
         - run:
             name: Bootstrap
-            command: jhbuild bootstap  
+            command: source ~/.profile && jhbuild bootstap  
 
 workflows:
   version: 2
