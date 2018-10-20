@@ -9,6 +9,17 @@ jobs:
         - run:
             name: Setup rust
             command: curl https://sh.rustup.rs -sSf | sh -s -- -y                        
+        - run:
+            name: Setup jhbuild
+            command: | 
+              curl  https://raw.githubusercontent.com/samm-git/gtk-osx/gimp-2.10/gtk-osx-build-setup.sh | sh
+              echo 'export PATH="$HOME/.cargo/bin:$PATH:$HOME/.local/bin"' > ~/.profile
+              echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
+              cat ~/.profile && source ~/.profile
+            
+        - run:
+            name: Bootstrap
+            command: jhbuild bootstap  
 
 workflows:
   version: 2
