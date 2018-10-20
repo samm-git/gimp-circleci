@@ -24,7 +24,7 @@ jobs:
         - run:
             name: Bootstrap
             # todo - complete bootstrap
-            command: source ~/.profile && jhbuild bootstrap && jhbuild python python-six meta-gtk-osx-bootstrap
+            command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-bootstrap
         - save_cache:
             paths:
               - ~/gtk
