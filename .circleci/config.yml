@@ -24,7 +24,7 @@ jobs:
             name: Bootstrap
             # todo - complete bootstrap
             command: source ~/.profile && jhbuild bootstrap
-        - save_cache
+        - save_cache:
             paths:
               - ~/gtk
             key: bootstap-v1
