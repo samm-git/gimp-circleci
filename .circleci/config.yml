@@ -18,16 +18,16 @@ jobs:
               cat ~/.profile
         # we need to make it automatically depended on the corresponding modules
         - restore_cache 
-          keys: 
-            - bootstap-v1    
+            keys: 
+              - bootstap-v1    
         - run:
             name: Bootstrap
             # todo - complete bootstrap
             command: source ~/.profile && jhbuild bootstrap
         - save_cache
-          paths:
-            - ~/gtk
-          key: bootstap-v1
+            paths:
+              - ~/gtk
+            key: bootstap-v1
 
 
 workflows:
