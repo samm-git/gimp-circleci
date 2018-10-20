@@ -19,18 +19,23 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
-              - bootstap-v2
-              - bootstap-v2   
-  
+              - bootstap-v3
+              - gimp-v1
         - run:
             name: Bootstrap
-            # todo - complete bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-bootstrap
         - save_cache:
             paths:
               - ~/gtk/inst
             key: bootstap-v3
-
+        - run:
+            name: Build gimp and all it deps
+            # Should we build deps-only first instead?
+            command: source ~/.profile && jhbuild build webkit gimp
+        - save_cache:
+            paths:
+              - ~/gtk/inst
+            key: gimp-v1
 
 workflows:
   version: 2
