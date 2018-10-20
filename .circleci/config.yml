@@ -19,15 +19,16 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
-              - bootstap-v1    
+              - bootstap-v1
+              - bootstap-v2   
         - run:
             name: Bootstrap
             # todo - complete bootstrap
-            command: source ~/.profile && jhbuild bootstrap
+            command: source ~/.profile && jhbuild bootstrap && jhbuild python python-six meta-gtk-osx-bootstrap
         - save_cache:
             paths:
               - ~/gtk
-            key: bootstap-v1
+            key: bootstap-v2
 
 
 workflows:
