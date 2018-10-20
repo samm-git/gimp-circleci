@@ -20,22 +20,24 @@ jobs:
         - restore_cache:
             keys: 
               - bootstap-v3
+              - bootstap-v4
               - gimp-v1
+              - gimp-v2
         - run:
             name: Bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-bootstrap
         - save_cache:
             paths:
-              - ~/gtk/inst
-            key: bootstap-v3
+              - ~/gtk
+            key: bootstap-v4
         - run:
             name: Build gimp and all it deps
             # Should we build deps-only first instead?
             command: source ~/.profile && jhbuild build webkit gimp
         - save_cache:
             paths:
-              - ~/gtk/inst
-            key: gimp-v1
+              - ~/gtk
+            key: gimp-v2
 
 workflows:
   version: 2
