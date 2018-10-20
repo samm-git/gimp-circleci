@@ -16,10 +16,18 @@ jobs:
               echo 'export PATH="$HOME/.cargo/bin:$PATH:$HOME/.local/bin"' > ~/.profile
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
               cat ~/.profile
-            
+        # we need to make it automatically depended on the corresponding modules
+        - restore_cache 
+          keys: bootstap-v1    
         - run:
             name: Bootstrap
-            command: source ~/.profile && jhbuild bootstrap  
+            # todo - complete bootstrap
+            command: source ~/.profile && jhbuild bootstrap
+        - save_cache
+          paths:
+            - ~/gtk
+          key: bootstap-v1
+
 
 workflows:
   version: 2
