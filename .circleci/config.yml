@@ -19,7 +19,7 @@ jobs:
             
         - run:
             name: Bootstrap
-            command: source ~/.profile && jhbuild bootstap  
+            command: source ~/.profile && jhbuild bootstrap  
 
 workflows:
   version: 2
