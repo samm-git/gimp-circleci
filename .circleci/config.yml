@@ -31,9 +31,8 @@ jobs:
               - ~/gtk
             key: bootstap-v4
         - run:
-            name: Build gimp and all it deps
-            # Should we build deps-only first instead?
-            command: source ~/.profile && jhbuild build webkit gimp
+            name: Build all GIMP dependencies
+            command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
         - save_cache:
             paths:
               - ~/gtk
