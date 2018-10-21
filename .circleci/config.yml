@@ -36,7 +36,7 @@ jobs:
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
-         - run:
+        - run:
             name: Build all WebKit dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info webkit|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
         - run:
