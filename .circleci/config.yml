@@ -19,12 +19,12 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
-              - bootstap-v3
-              - bootstap-v4
-              - bootstrap-v5
               - gimp-v1
               - gimp-v2
               - gimp-v3
+              - bootstap-v3
+              - bootstap-v4
+              - bootstrap-v5
         - run:
             name: Bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-bootstrap
