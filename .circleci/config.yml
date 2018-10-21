@@ -20,6 +20,7 @@ jobs:
         - restore_cache:
             keys: 
               - webkit-v1
+              - gimp-v4
               - gimp-v3
               - bootstrap-v5
         - run:
@@ -35,13 +36,16 @@ jobs:
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
+         - run:
+            name: Build all WebKit dependencies
+            command: source ~/.profile && jhbuild build $(jhbuild info webkit|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
         - run:
             name: Cleanup
             command: find  ~/gtk/source -type d -mindepth 1 -maxdepth 1 | xargs -I% rm -rf %/*
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-v3
+            key: gimp-v4
         - run:
             name: Build WebKit v1
             # such a pain!
