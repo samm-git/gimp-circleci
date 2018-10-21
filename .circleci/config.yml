@@ -19,6 +19,7 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
+              - webkit-v1
               - gimp-v3
               - bootstrap-v5
         - run:
@@ -42,9 +43,14 @@ jobs:
               - ~/gtk
             key: gimp-v3
         - run:
-            name: Build webkit v1
+            name: Build WebKit v1
             # such a pain!
             no_output_timeout: 1h
+            command: source ~/.profile && jhbuild build webkit
+        - save_cache:
+            paths:
+              - ~/gtk
+            key: webkit-v1
 
 workflows:
   version: 2
