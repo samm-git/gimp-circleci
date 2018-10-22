@@ -21,7 +21,6 @@ jobs:
             keys: 
               - webkit-v1
               - gimp-v4
-              - gimp-v3
               - bootstrap-v5
         - run:
             name: Bootstrap
@@ -58,6 +57,9 @@ jobs:
             paths:
               - ~/gtk
             key: webkit-v1
+        - run:
+            name: Build GIMP
+            command:  source ~/.profile && jhbuild build gimp
 
 workflows:
   version: 2
