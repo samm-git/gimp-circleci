@@ -17,7 +17,7 @@ jobs:
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
               cat ~/.profile
         - run: Setup gtk-mac-bundler
-            command: |
+            command: | 
               cd ~/Source
               git clone https://github.com/jralls/gtk-mac-bundler
               cd gtk-mac-bundler
