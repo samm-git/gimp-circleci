@@ -13,9 +13,15 @@ jobs:
             name: Setup jhbuild
             command: | 
               curl  https://raw.githubusercontent.com/samm-git/gtk-osx/gimp-2.10/gtk-osx-build-setup.sh | sh
-              echo 'export PATH="$HOME/.cargo/bin:$PATH:$HOME/.local/bin"' > ~/.profile
+              echo 'export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"' > ~/.profile
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
               cat ~/.profile
+        - run: Setup gtk-mac-bundler
+            command: |
+              cd ~/Source
+              git clone https://github.com/jralls/gtk-mac-bundler
+              cd gtk-mac-bundler
+              make install
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
