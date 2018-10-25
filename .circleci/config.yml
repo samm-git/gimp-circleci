@@ -29,8 +29,8 @@ jobs:
               - gimp-2.10.6-v3
               - webkit-v3
               - gimp-deps-v3
-              - bootstrap-v7
               - bootstrap-v8
+              - bootstrap-v7
         - run:
             name: Bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-core
