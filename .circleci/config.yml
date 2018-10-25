@@ -30,16 +30,17 @@ jobs:
               - webkit-v3
               - gimp-deps-v3
               - bootstrap-v7
+              - bootstrap-v8
         - run:
             name: Bootstrap
-            command: source ~/.profile && jhbuild bootstrap
+            command: source ~/.profile && jhbuild bootstrap && jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-core
         - run:
             name: Cleanup
             command: find  ~/gtk/source -type d -mindepth 1 -maxdepth 1 | xargs -I% rm -rf %/*
         - save_cache:
             paths:
               - ~/gtk
-            key: bootstrap-v7
+            key: bootstrap-v8
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
