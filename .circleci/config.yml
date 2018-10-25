@@ -12,7 +12,7 @@ jobs:
         - run:
             name: Setup jhbuild
             command: | 
-              curl  https://raw.githubusercontent.com/samm-git/gtk-osx/gimp-2.10/gtk-osx-build-setup.sh | sh
+              curl  https://gitlab.gnome.org/samm-git/gtk-osx/raw/master/gtk-osx-build-setup.sh | sh
               echo 'export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"' > ~/.profile
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
               cat ~/.profile
@@ -26,10 +26,10 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
-              - gimp-2.10.6-v1
-              - webkit-v1
-              - gimp-deps-v1
-              - bootstrap-v5
+              - gimp-2.10.6-v2
+              - webkit-v2
+              - gimp-deps-v2
+              - bootstrap-v6
         - run:
             name: Bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-bootstrap
@@ -39,7 +39,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: bootstrap-v5
+            key: bootstrap-v6
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
@@ -52,7 +52,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-deps-v1
+            key: gimp-deps-v2
         - run:
             name: Build WebKit v1
             no_output_timeout: 1h
@@ -63,7 +63,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: webkit-v1
+            key: webkit-v2
         - run:
             name: Build GIMP
             command:  source ~/.profile && jhbuild build gimp
@@ -73,7 +73,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-2.10.6-v1
+            key: gimp-2.10.6-v2
 workflows:
   version: 2
   build-different-versions:
