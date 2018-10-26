@@ -23,7 +23,7 @@ jobs:
             name: Setup gtk-mac-bundler
             command: | 
               cd ~/Source
-              git clone https://github.com/jralls/gtk-mac-bundler
+              git clone https://github.com/samm-git/gtk-mac-bundler -b fix-otool
               cd gtk-mac-bundler
               make install
         # we need to make it automatically depended on the corresponding modules
