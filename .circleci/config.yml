@@ -77,6 +77,17 @@ jobs:
             paths:
               - ~/gtk
             key: gimp-2.10.6-v4
+        - run:
+            name: Creating DMG package
+            command: |
+              source ~/.profile
+              git checkout https://github.com/samm-git/gimp-osx-package
+              cd gimp-osx-package
+              jhbuild run ./build.sh
+        - store_artifacts:
+            path: /tmp/artifacts
+            destination: builds
+
 workflows:
   version: 2
   build-different-versions:
