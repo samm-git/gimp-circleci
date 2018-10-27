@@ -3,7 +3,7 @@ jobs:
   build-gimp-2-10:
     macos:
         xcode: "10.0.0"
-      
+
     steps:
         - checkout
         - run:
@@ -13,31 +13,32 @@ jobs:
             name: Setup rust
             command: curl https://sh.rustup.rs -sSf | sh -s -- -y
         - run:
-            name: Setup jhbuild
-            command: | 
+            name: Setup jhbuild and enable debug
+            command: |
               curl  https://gitlab.gnome.org/samm-git/gtk-osx/raw/fork-test/gtk-osx-build-setup.sh | sh
               echo 'export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"' > ~/.profile
               echo 'export ARCHFLAGS="-arch x86_64"' >> ~/.profile
+              echo 'setup_debug()' >> ~/.jhbuildrc-custom
               cat ~/.profile
         - run:
             name: Setup gtk-mac-bundler
-            command: | 
+            command: |
               cd ~/Source
               git clone https://github.com/samm-git/gtk-mac-bundler -b fix-otool
               cd gtk-mac-bundler
               make install
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
-            keys: 
-              - gimp-2.10.12-v1
-              - webkit-v11
-              - gimp-deps-v11
-              - bootstrap-v13
+            keys:
+              - gimp-2.10.12-dbg-v1
+              - webkit-dbg-dbg-v5
+              - gimp-deps-dbg-v5
+              - bootstrap-dbg-v10
         - run:
             name: Setup 10.9 SDK
-            command: | 
+            command: |
               cd /Library/Developer/CommandLineTools/SDKs
-              sudo curl -L 'https://github.com/phracker/MacOSX-SDKs/releases/download/MacOSX10.11.sdk/MacOSX10.9.sdk.tar.xz' | sudo tar -xzf - 
+              sudo curl -L 'https://github.com/phracker/MacOSX-SDKs/releases/download/MacOSX10.11.sdk/MacOSX10.9.sdk.tar.xz' | sudo tar -xzf -
               echo 'export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX10.9.sdk' >> ~/.profile
         - run:
             name: Bootstrap
@@ -48,7 +49,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: bootstrap-v13
+            key: bootstrap-dbg-v10
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
@@ -61,7 +62,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-deps-v11
+            key: gimp-deps-dbg-v5
         - run:
             name: Build WebKit v1
             no_output_timeout: 1h
@@ -72,14 +73,11 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: webkit-v11
-#        - run:
-#            name: rebuild gtk (temporary)
-#            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
+            key: webkit-dbg-v5
         - run:
             name: Build GIMP
             # XXX make check is not working reliably under circle ci, so not running it
-            command: | 
+            command: |
               source ~/.profile
               jhbuild build gimp
         - run:
@@ -91,7 +89,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-2.10.12-v1
+            key: gimp-2.10.12-dbg-v1
         - run:
             name: Importing signing certificate
             command: |
@@ -121,4 +119,3 @@ workflows:
   build-different-versions:
     jobs:
       - build-gimp-2-10
- 
