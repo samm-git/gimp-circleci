@@ -69,7 +69,7 @@ jobs:
             key: webkit-v4
         - run:
             name: rebuild gtk (temporary)
-            command: source ~/.profile && rm -rf ~/gtk/source/gtk && jhbuild buildone --force gtk
+            command: source ~/.profile && rm -rf ~/gtk/source/gtk && jhbuild buildone --force gtk+
         - run:
             name: Build GIMP
             command:  source ~/.profile && jhbuild build gimp
