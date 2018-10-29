@@ -109,7 +109,7 @@ jobs:
             command: |
               source ~/.profile
               cd ${HOME}/project/package
-              jhbuild run ./build.sh
+              jhbuild run ./build.sh debug
         - store_artifacts:
             path: /tmp/artifacts
             destination: builds
