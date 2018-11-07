@@ -67,9 +67,9 @@ jobs:
             paths:
               - ~/gtk
             key: webkit-v4
-        - run:
-            name: rebuild gtk (temporary)
-            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
+#        - run:
+#            name: rebuild gtk (temporary)
+#            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
         - run:
             name: Build GIMP
             command:  source ~/.profile && jhbuild build gimp
