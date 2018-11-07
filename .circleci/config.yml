@@ -30,7 +30,6 @@ jobs:
         - restore_cache:
             keys: 
               - gimp-2.10.6-v5
-              - gimp-2.10.6-v4
               - webkit-v4
               - gimp-deps-v4
               - bootstrap-v9
