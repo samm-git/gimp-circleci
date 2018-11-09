@@ -29,6 +29,7 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
+              - gimp-2.10.8-v1
               - gimp-2.10.6-v5
               - webkit-v4
               - gimp-deps-v4
@@ -71,6 +72,9 @@ jobs:
 #            name: rebuild gtk (temporary)
 #            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
         - run:
+            name: rebuild babl (temporary)
+            command: source ~/.profile && rm -rf ~/gtk/source/babl* && jhbuild buildone --force babl
+        - run:
             name: Build GIMP
             command:  source ~/.profile && jhbuild build gimp
         - run:
@@ -82,7 +86,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-2.10.6-v5
+            key: gimp-2.10.8-v1
         - run:
             name: Creating DMG package
             command: |
