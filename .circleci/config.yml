@@ -36,9 +36,9 @@ jobs:
         - run:
             name: Setup 10.9 SDK
             command: | 
-              cd /Applications/Xcode-10.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs
+              cd /Library/Developer/CommandLineTools/SDKs
               sudo curl -L 'https://github.com/phracker/MacOSX-SDKs/releases/download/MacOSX10.11.sdk/MacOSX10.9.sdk.tar.xz' | sudo tar -xzf - 
-              echo 'export SDKROOT=/Applications/Xcode-10.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk' >> ~/.profile
+              echo 'export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX10.9.sdk' >> ~/.profile
         - run:
             name: Bootstrap
             command: source ~/.profile && jhbuild bootstrap && jhbuild build python python-six meta-gtk-osx-freetype meta-gtk-osx-bootstrap meta-gtk-osx-core
