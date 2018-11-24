@@ -78,7 +78,13 @@ jobs:
 #            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
         - run:
             name: Build GIMP and test it
-            command:  source ~/.profile && GTK_PATH=${HOME}/gtk/inst/lib/gtk-2.0/2.10.0 DISPLAY=1 jhbuild build --check gimp
+            # build --check does not work as gimp test expects gimp to be installed (BUG)
+            # until it is fixed we will run make check after install
+            command: | 
+              source ~/.profile
+              jhbuild build gimp
+              cd `jhbuild info gimp|grep '^Sourcedir:'|awk '{print $2}'`
+              GTK_PATH=${HOME}/gtk/inst/lib/gtk-2.0/2.10.0 DISPLAY=1 make check
         - run:
             name: Building GIMP help (en) from git
             command: source ~/.profile && ALL_LINGUAS=en jhbuild build gimp-help-git
