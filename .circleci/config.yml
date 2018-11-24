@@ -84,7 +84,8 @@ jobs:
               source ~/.profile
               jhbuild build gimp
               cd `jhbuild info gimp|grep '^Sourcedir:'|awk '{print $2}'`
-              GTK_PATH=${HOME}/gtk/inst/lib/gtk-2.0/2.10.0 DISPLAY=1 make check
+              pwd
+              GTK_PATH=${HOME}/gtk/inst/lib/gtk-2.0/2.10.0 DISPLAY=1 jhbuild run make check
         - run:
             name: Building GIMP help (en) from git
             command: source ~/.profile && ALL_LINGUAS=en jhbuild build gimp-help-git
