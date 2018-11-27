@@ -110,8 +110,7 @@ jobs:
             name: Creating DMG package
             command: |
               source ~/.profile
-              git clone https://github.com/samm-git/gimp-osx-package
-              cd gimp-osx-package
+              cd package
               jhbuild run ./build.sh
         - store_artifacts:
             path: /tmp/artifacts
