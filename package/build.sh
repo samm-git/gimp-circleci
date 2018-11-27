@@ -84,8 +84,13 @@ cp xdg-email ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS
 echo "Creating pyc files"
 python -m compileall ${PACKAGE_DIR}/GIMP-2.10.app
 
-echo "Building DMG"
+echo "Signing app"
+if [ -n "${codesign_subject}" ]
+then
+  /usr/bin/codesign  -s "${codesign_subject}" --deep ${PACKAGE_DIR}/GIMP-2.10.app
+fi
 
+echo "Building DMG"
 if [ -z "${CIRCLECI}" ]
 then
   DMGNAME="gimp-${GIMP_VERSION}-x86_64.dmg"
@@ -100,5 +105,3 @@ hdiutil create /tmp/tmp.dmg -ov -volname "GIMP 2.10 Install" -fs HFS+ -srcfolder
 hdiutil convert /tmp/tmp.dmg -format UDBZ -o "/tmp/artifacts/${DMGNAME}"
 
 echo "Done"
-
-# TODO: code signing
