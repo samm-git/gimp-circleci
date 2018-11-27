@@ -104,4 +104,10 @@ rm -f "gimp-${GIMP_VERSION}-x86_64.dmg"
 hdiutil create /tmp/tmp.dmg -ov -volname "GIMP 2.10 Install" -fs HFS+ -srcfolder "$PACKAGE_DIR/"
 hdiutil convert /tmp/tmp.dmg -format UDBZ -o "/tmp/artifacts/${DMGNAME}"
 
+echo "Signing DMG"
+if [ -n "${codesign_subject}" ]
+then
+  /usr/bin/codesign  -s "${codesign_subject}" "/tmp/artifacts/${DMGNAME}"
+fi
+
 echo "Done"
