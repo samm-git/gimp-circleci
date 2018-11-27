@@ -52,6 +52,11 @@ if [[ "$1" == "debug" ]]; then
      | xargs -n1 dsymutil
 fi
 
+echo "remove @rpath to the libraries"
+find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/ -mindepth 1 -maxdepth 1 -perm +111 -type f \
+   | grep -v '\.py$' \
+   | xargs -n1 install_name_tool -delete_rpath ${HOME}/gtk/inst/lib
+
 echo "adding @rpath to the binaries"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS/ -type f -perm +111 \
    | grep -v '\.py$' \
