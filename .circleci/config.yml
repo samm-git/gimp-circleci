@@ -110,7 +110,7 @@ jobs:
             name: Creating DMG package
             command: |
               source ~/.profile
-              cd package
+              cd ${HOME}/project/package
               jhbuild run ./build.sh
         - store_artifacts:
             path: /tmp/artifacts
