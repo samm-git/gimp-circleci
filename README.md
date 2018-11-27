@@ -1,3 +1,10 @@
 # Build GIMP/OSX inside CircleCI
 
-This is PoC to build complete GIMP/OSX package in the CircleCI 2.0. 
+This repository contains files related to GIMP/OSX build using CircleCI.
+
+## Branches
+
+- master: latest GIMP release
+- gimp-2-10: gimp-2-10 build
+- debug: same as master, but with full debug symbols
+
