@@ -30,9 +30,11 @@ echo "Removing pathnames from the libraries and binaries"
 # fix permission for some libs
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib -name '*.dylib' -type f | xargs chmod 755
 # getting list of the files to fix
-# fixme: we should check if file is Mach-O binary
-
-FILES=`find ${PACKAGE_DIR}/GIMP-2.10.app -perm +111 -type f | grep -v '\.py$'`
+FILES=$(
+  find ${PACKAGE_DIR}/GIMP-2.10.app -perm +111 -type f \
+   | xargs file \
+   | grep ' Mach-O '|awk -F ':' '{print $1}'
+)
 OLDPATH="${JHBUILD_LIBDIR}/"
 
 for file in $FILES
@@ -49,26 +51,26 @@ if [[ "$1" == "debug" ]]; then
   echo "Generating debug symbols"
   find  ${PACKAGE_DIR}/GIMP-2.10.app/ -type f -perm +111 \
      | xargs file \
-     | grep '^Mach-O '|awk -F ':' '{print $1}' \
+     | grep ' Mach-O '|awk -F ':' '{print $1}' \
      | xargs -n1 dsymutil
 fi
 
 echo "remove @rpath to the libraries"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/ -mindepth 1 -maxdepth 1 -perm +111 -type f \
    | xargs file \
-   | grep '^Mach-O '|awk -F ':' '{print $1}' \
+   | grep ' Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -delete_rpath ${HOME}/gtk/inst/lib
 
 echo "adding @rpath to the binaries"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS/ -type f -perm +111 \
    | xargs file \
-   | grep '^Mach-O '|awk -F ':' '{print $1}' \
+   | grep ' Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -add_rpath @executable_path/../Resources/lib/
 
 echo "adding @rpath to the plugins"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/gimp/2.0/plug-ins/ -perm +111 -type f \
    | xargs file \
-   | grep '^Mach-O '|awk -F ':' '{print $1}' \
+   | grep ' Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -add_rpath @executable_path/../../../
 
 echo "fixing pixmap cache"
@@ -91,7 +93,7 @@ echo "copy xdg-email wrapper to the package"
 cp xdg-email ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS
 
 echo "Creating pyc files"
-python -m compileall ${PACKAGE_DIR}/GIMP-2.10.app
+python -m compileall -q ${PACKAGE_DIR}/GIMP-2.10.app
 
 echo "Signing libs"
 
@@ -100,7 +102,7 @@ then
   echo "Signing libraries and plugins"
   find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/ -type f -perm +111 \
      | xargs file \
-     | grep '^Mach-O '|awk -F ':' '{print $1}' \
+     | grep ' Mach-O '|awk -F ':' '{print $1}' \
      | xargs /usr/bin/codesign -s "${codesign_subject}"
   echo "Signing app"
   /usr/bin/codesign -s "${codesign_subject}" --deep ${PACKAGE_DIR}/GIMP-2.10.app
