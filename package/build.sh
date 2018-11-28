@@ -47,24 +47,28 @@ done
 
 if [[ "$1" == "debug" ]]; then
   echo "Generating debug symbols"
-  find  ${PACKAGE_DIR}/GIMP-2.10.app/ -type f -perm +111 -exec file '{}' ';' \
-     | grep 'Mach-O'|awk -F ':' '{print $1}' \
+  find  ${PACKAGE_DIR}/GIMP-2.10.app/ -type f -perm +111 \
+     | xargs file \
+     | grep '^Mach-O '|awk -F ':' '{print $1}' \
      | xargs -n1 dsymutil
 fi
 
 echo "remove @rpath to the libraries"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/ -mindepth 1 -maxdepth 1 -perm +111 -type f \
-   | grep -v '\.py$' \
+   | xargs file \
+   | grep '^Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -delete_rpath ${HOME}/gtk/inst/lib
 
 echo "adding @rpath to the binaries"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS/ -type f -perm +111 \
-   | grep -v '\.py$' \
+   | xargs file \
+   | grep '^Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -add_rpath @executable_path/../Resources/lib/
 
 echo "adding @rpath to the plugins"
 find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/gimp/2.0/plug-ins/ -perm +111 -type f \
-   | grep -v '\.py$' \
+   | xargs file \
+   | grep '^Mach-O '|awk -F ':' '{print $1}' \
    | xargs -n1 install_name_tool -add_rpath @executable_path/../../../
 
 echo "fixing pixmap cache"
@@ -89,10 +93,17 @@ cp xdg-email ${PACKAGE_DIR}/GIMP-2.10.app/Contents/MacOS
 echo "Creating pyc files"
 python -m compileall ${PACKAGE_DIR}/GIMP-2.10.app
 
-echo "Signing app"
+echo "Signing libs"
+
 if [ -n "${codesign_subject}" ]
 then
-  /usr/bin/codesign  -s "${codesign_subject}" --deep ${PACKAGE_DIR}/GIMP-2.10.app
+  echo "Signing libraries and plugins"
+  find  ${PACKAGE_DIR}/GIMP-2.10.app/Contents/Resources/lib/ -type f -perm +111 \
+     | xargs file \
+     | grep '^Mach-O '|awk -F ':' '{print $1}' \
+     | xargs /usr/bin/codesign -s "${codesign_subject}"
+  echo "Signing app"
+  /usr/bin/codesign -s "${codesign_subject}" --deep ${PACKAGE_DIR}/GIMP-2.10.app
 fi
 
 echo "Building DMG"
@@ -109,9 +120,9 @@ rm -f "gimp-${GIMP_VERSION}-x86_64.dmg"
 hdiutil create /tmp/tmp.dmg -ov -volname "GIMP 2.10 Install" -fs HFS+ -srcfolder "$PACKAGE_DIR/"
 hdiutil convert /tmp/tmp.dmg -format UDBZ -o "/tmp/artifacts/${DMGNAME}"
 
-echo "Signing DMG"
 if [ -n "${codesign_subject}" ]
 then
+  echo "Signing DMG"
   /usr/bin/codesign  -s "${codesign_subject}" "/tmp/artifacts/${DMGNAME}"
 fi
 
