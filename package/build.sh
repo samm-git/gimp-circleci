@@ -105,7 +105,12 @@ then
      | grep ' Mach-O '|awk -F ':' '{print $1}' \
      | xargs /usr/bin/codesign -s "${codesign_subject}"
   echo "Signing app"
-  /usr/bin/codesign -s "${codesign_subject}" --deep ${PACKAGE_DIR}/GIMP-2.10.app
+  /usr/bin/codesign -s "${codesign_subject}" \
+    --timestamp \
+    --deep \
+    --options runtime \
+    --entitlements ${HOME}/project/package/gimp-hardening.entitlements \
+    ${PACKAGE_DIR}/GIMP-2.10.app
 fi
 
 echo "Building DMG"
