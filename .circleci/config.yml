@@ -32,7 +32,7 @@ jobs:
               - gimp-2.10.10-v1
               - webkit-v10
               - gimp-deps-v10
-              - bootstrap-v12
+              - bootstrap-v13
         - run:
             name: Setup 10.9 SDK
             command: | 
@@ -48,7 +48,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: bootstrap-v12
+            key: bootstrap-v13
         - run:
             name: Build all GIMP dependencies
             command: source ~/.profile && jhbuild build $(jhbuild info gimp|grep '^Requires:'|sed 's|^Requires:||'|tr -d ',')
