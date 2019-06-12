@@ -29,9 +29,9 @@ jobs:
         # we need to make it automatically depended on the corresponding modules
         - restore_cache:
             keys: 
-              - gimp-2.10.10-v1
-              - webkit-v10
-              - gimp-deps-v10
+              - gimp-2.10.10-v2
+              - webkit-v11
+              - gimp-deps-v11
               - bootstrap-v13
         - run:
             name: Setup 10.9 SDK
@@ -61,7 +61,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-deps-v10
+            key: gimp-deps-v11
         - run:
             name: Build WebKit v1
             no_output_timeout: 1h
@@ -72,7 +72,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: webkit-v10
+            key: webkit-v11
 #        - run:
 #            name: rebuild gtk (temporary)
 #            command: source ~/.profile && rm -rf ~/gtk/source/gtk+-2.24.32 && jhbuild buildone --force gtk+
@@ -91,7 +91,7 @@ jobs:
         - save_cache:
             paths:
               - ~/gtk
-            key: gimp-2.10.10-v1
+            key: gimp-2.10.10-v2
         - run:
             name: Importing signing certificate
             command: |
